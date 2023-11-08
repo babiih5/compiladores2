@@ -6,7 +6,7 @@
     #include <math.h>
 
     int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0,tarefas=0,perc_bateria;
-    char *materiais="", *instrucao="", *posicao="Posto de Carregamento";
+    char *materiais="", *instrucao="", *posicao="Posto de Carregamento", *linha="";
 
 
 %}
@@ -57,11 +57,19 @@ ESTADO ESTADO
 
 <ER_BATERIA>\) BEGIN 0;
 
-{ENTREGA}\c BEGIN(ER_ENTREGA);
-<ER_ENTREGA>([A-Z]{2}([1-9]\d{0,1}|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   estado_bateria = atoi(yytext);
+{ENTREGA}\( BEGIN(ER_ENTREGA);
+<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   *linha = atoi(yytext);
+                                                                        *materiais = atoi(yytext);
+                                                                        quantidade=atoi(yytext);
+
                                                                         
+                                                                        printf("%s",linha);
+                                                                        printf("%s",materiais);
+                                                                        printf("%d", quantidade);
 
                                                                     }
+
+<ER_ENTREGA>\) BEGIN 0;
 
 
 %%
@@ -73,4 +81,5 @@ ESTADO ESTADO
 int main (void){
      yylex();
     printf("\n%s \n\n", posicao);
+    printf("%s",materiais);
 }
