@@ -25,10 +25,12 @@ ESTADO ESTADO
 <ER_MANUTENCAO>([0-2]) {    manutencao = atoi(yytext);
                             if (manutencao==0){
                                 posicao="Posto de Manutencao";
+                                num_manutencao = num_manutencao + 1;
                             }
                             else if (manutencao==1){
                                 if (tarefas==0){
                                     posicao="Posto de Manutencao";
+                                    num_manutencao = num_manutencao + 1;
                                 }
 
                             }
@@ -44,6 +46,7 @@ ESTADO ESTADO
 <ER_BATERIA>([0-2]) {    estado_bateria = atoi(yytext);
                             if (estado_bateria==0){
                                 posicao="Posto de Carregamento";
+                                
                             }
                             else if (estado_bateria==1){
                                 if (tarefas==0){
@@ -71,9 +74,11 @@ ESTADO ESTADO
                                                                         printf("Material: %s\n",material_entrega);
                                                                         printf("Quantidade: %d\n", quantidade);
 
+
                                                                         quantidade = 0;
                                                                         material_carro = "";
                                                                         tarefas = 0;
+                                                                        posicao = "Fabrica";
 
                                                                     }
 
@@ -91,7 +96,7 @@ ESTADO ESTADO
                                                                                     printf("Quantidade: %d\n", quantidade);
                                                                                     
                                                                                     tarefas = tarefas + 1;
-                                                                                    
+                                                                                    posicao = "Armazem";
                                                                                     
                                                                        
                                                                         
@@ -113,7 +118,9 @@ ESTADO ESTADO
                                                         printf("Tarefas pendentes: %d \n", tarefas);
                                                     }
                                                     else if (strcmp(aux_estado, "M") == 0){
-                                                        printf("Materiais: %s \nQuantidade: %d \n",material_carro, quantidade);
+                                                        printf("Materiais: %s \n",material_carro);
+                                                        printf("Quantidade: %d \n", quantidade);
+
                                                     }
 
 
@@ -131,6 +138,12 @@ ESTADO ESTADO
 
 int main (void){
      yylex();
-    printf("\nLocalização: %s \n\n", posicao);
+     printf("\n----------------------------------\n");
+     printf("Estado da Bateria: %d \n", estado_bateria);
+    printf("Localização: %s \n", posicao);
+    printf("Materiais: %s \n", material_carro);
+    printf("Quantidade: %d \n", quantidade);
+    printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+    printf("----------------------------------\n\n");
     
 }

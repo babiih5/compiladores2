@@ -842,10 +842,12 @@ YY_RULE_SETUP
 {    manutencao = atoi(yytext);
                             if (manutencao==0){
                                 posicao="Posto de Manutencao";
+                                num_manutencao = num_manutencao + 1;
                             }
                             else if (manutencao==1){
                                 if (tarefas==0){
                                     posicao="Posto de Manutencao";
+                                    num_manutencao = num_manutencao + 1;
                                 }
 
                             }
@@ -855,20 +857,21 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 40 "trabalho2.l"
+#line 42 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 43 "trabalho2.l"
+#line 45 "trabalho2.l"
 BEGIN(ER_BATERIA);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 44 "trabalho2.l"
+#line 46 "trabalho2.l"
 {    estado_bateria = atoi(yytext);
                             if (estado_bateria==0){
                                 posicao="Posto de Carregamento";
+                                
                             }
                             else if (estado_bateria==1){
                                 if (tarefas==0){
@@ -882,17 +885,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 59 "trabalho2.l"
+#line 62 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 62 "trabalho2.l"
+#line 65 "trabalho2.l"
 BEGIN(ER_ENTREGA);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 63 "trabalho2.l"
+#line 66 "trabalho2.l"
 {    linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
@@ -904,25 +907,27 @@ YY_RULE_SETUP
                                                                         printf("Material: %s\n",material_entrega);
                                                                         printf("Quantidade: %d\n", quantidade);
 
+
                                                                         quantidade = 0;
                                                                         material_carro = "";
                                                                         tarefas = 0;
+                                                                        posicao = "Fabrica";
 
                                                                     }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 80 "trabalho2.l"
+#line 85 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 83 "trabalho2.l"
+#line 88 "trabalho2.l"
 BEGIN(ER_RECOLHE);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 84 "trabalho2.l"
+#line 89 "trabalho2.l"
 {  aux_material = strtok(yytext, ",");
                                                                                     material_carro = aux_material + 1;
 
@@ -933,7 +938,7 @@ YY_RULE_SETUP
                                                                                     printf("Quantidade: %d\n", quantidade);
                                                                                     
                                                                                     tarefas = tarefas + 1;
-                                                                                    
+                                                                                    posicao = "Armazem";
                                                                                     
                                                                        
                                                                         
@@ -941,17 +946,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 103 "trabalho2.l"
+#line 108 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 106 "trabalho2.l"
+#line 111 "trabalho2.l"
 BEGIN(ER_ESTADO);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 107 "trabalho2.l"
+#line 112 "trabalho2.l"
 {  aux_estado = yytext;
 
                                                     if (strcmp(aux_estado, "B") == 0){
@@ -961,7 +966,9 @@ YY_RULE_SETUP
                                                         printf("Tarefas pendentes: %d \n", tarefas);
                                                     }
                                                     else if (strcmp(aux_estado, "M") == 0){
-                                                        printf("Materiais: %s \nQuantidade: %d \n",material_carro, quantidade);
+                                                        printf("Materiais: %s \n",material_carro);
+                                                        printf("Quantidade: %d \n", quantidade);
+
                                                     }
 
 
@@ -969,15 +976,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 124 "trabalho2.l"
+#line 131 "trabalho2.l"
 BEGIN 0; 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 126 "trabalho2.l"
+#line 133 "trabalho2.l"
 ECHO;
 	YY_BREAK
-#line 981 "lex.yy.c"
+#line 988 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ER_MANUTENCAO):
 case YY_STATE_EOF(ER_BATERIA):
@@ -1987,7 +1994,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 126 "trabalho2.l"
+#line 133 "trabalho2.l"
 
 
 
@@ -1996,6 +2003,12 @@ void yyfree (void * ptr )
 
 int main (void){
      yylex();
-    printf("\nLocalização: %s \n\n", posicao);
+     printf("\n----------------------------------\n");
+     printf("Estado da Bateria: %d \n", estado_bateria);
+    printf("Localização: %s \n", posicao);
+    printf("Materiais: %s \n", material_carro);
+    printf("Quantidade: %d \n", quantidade);
+    printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+    printf("----------------------------------\n\n");
     
 }
