@@ -78,16 +78,16 @@ ESTADO ESTADO
 {RECOLHE}\[ BEGIN(ER_RECOLHE);
 <ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  
                                                                                     
-                                                                        materiais = yytext;
+                                                                        *materiais = atoi(yytext);
                                                                 
 
                                                                         for (int i; i<80;i++){
                                                                             if (i>0){
-                                                                                teste = materiais[i]+materiais[i-1];
+                                                                                *teste = materiais[i]+materiais[i-1];
                                                                             }
                                                                             
                                                                             if (teste="),"){
-                                                                                numrec+=1
+                                                                                numrec+=1;
                                                                             }
                                                                         }
                                                                         
