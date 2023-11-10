@@ -71,6 +71,20 @@ ESTADO ESTADO
 
 <ER_ENTREGA>\) BEGIN 0;
 
+{RECOLHE}\( BEGIN(ER_ENTREGA);
+<ER_RECOLHE>(\[\([A-Za-z0-9]{5},[1-9][0-9]*\)+\])                   {   *linha = atoi(yytext);
+                                                                        *materiais = atoi(yytext);
+                                                                        quantidade=atoi(yytext);
+
+                                                                        
+                                                                        printf("%s",linha);
+                                                                        printf("%s",materiais);
+                                                                        printf("%d", quantidade);
+
+                                                                    }
+
+<ER_RECOLHE>\) BEGIN 0;
+
 
 %%
 
