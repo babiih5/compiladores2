@@ -1,4 +1,4 @@
-%x ER_MANUTENCAO ER_BATERIA ER_ENTREGA ER_RECOLHE 
+%x ER_MANUTENCAO ER_BATERIA ER_ENTREGA ER_RECOLHE ER_ESTADO
 
 
 %{
@@ -6,7 +6,7 @@
     #include <math.h>
 
     int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0,tarefas=0,perc_bateria, quantidades[80], numrec=0;
-    char materiais[80], *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material="", *teste="";
+    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material="", *id_estado="",*aux_material="";
 
 
 %}
@@ -76,31 +76,35 @@ ESTADO ESTADO
 
 
 {RECOLHE}\[ BEGIN(ER_RECOLHE);
-<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  
-                                                                                    
-                                                                        *materiais = atoi(yytext);
-                                                                
+<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  aux_material = strtok(yytext, ",");
+                                                                                    material = aux_material + 1;
 
-                                                                        for (int i; i<80;i++){
-                                                                            if (i>0){
-                                                                                *teste = materiais[i]+materiais[i-1];
-                                                                            }
-                                                                            
-                                                                            if (teste="),"){
-                                                                                numrec+=1;
-                                                                            }
+                                                                                    quant_str = strtok(NULL, ")");
+                                                                                    quantidade=atoi(quant_str);
+
+                                                                                    printf("%s\n",material);
+                                                                                    printf("%d\n", quantidade);
+                                                                       
+                                                                        
                                                                         }
                                                                         
 
                                                                         
                                                                        
-
-                                                                    }
-
 <ER_RECOLHE>\] BEGIN 0;
 
 
+{ESTADO}\( BEGIN(ER_BATERIA);
+<ER_ESTADO>([BTM]|[BTM],[BTM],[BTM]|[BTM],[BTM]) {  
 
+
+
+                                                }
+
+
+
+
+<ER_ESTADO>\) BEGIN 0; 
 %%
 
 
@@ -110,5 +114,4 @@ ESTADO ESTADO
 int main (void){
      yylex();
     printf("\n%s \n\n", posicao);
-    printf("%s",materiais);
 }
