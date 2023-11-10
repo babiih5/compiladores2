@@ -113,9 +113,8 @@ ESTADO ESTADO
                                                         printf("Tarefas pendentes: %d \n", tarefas);
                                                     }
                                                     else if (strcmp(aux_estado, "M") == 0){
-                                                        printf("Materiais: %s \nQuantidade: %d \n", quantidade);
+                                                        printf("Materiais: %s \nQuantidade: %d \n",material_carro, quantidade);
                                                     }
-
 
 
                                                 }

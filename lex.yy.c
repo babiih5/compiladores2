@@ -546,7 +546,7 @@ char *yytext;
     #include <string.h>
 
     int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, perc_bateria;
-    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="", *id_estado="",*aux_material="", *aux_estado="", *teste="";
+    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="", *id_estado="",*aux_material="", *aux_estado="";
 
 
 #line 553 "lex.yy.c"
@@ -933,7 +933,7 @@ YY_RULE_SETUP
                                                                                     printf("Quantidade: %d\n", quantidade);
                                                                                     
                                                                                     tarefas = tarefas + 1;
-                                                                                    teste = material_carro;
+                                                                                    
                                                                                     
                                                                        
                                                                         
@@ -961,24 +961,23 @@ YY_RULE_SETUP
                                                         printf("Tarefas pendentes: %d \n", tarefas);
                                                     }
                                                     else if (strcmp(aux_estado, "M") == 0){
-                                                        printf("Materiais: %s \nQuantidade: %d \n", teste, quantidade);
+                                                        printf("Materiais: %s \nQuantidade: %d \n",material_carro, quantidade);
                                                     }
-
 
 
                                                 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 126 "trabalho2.l"
+#line 124 "trabalho2.l"
 BEGIN 0; 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 128 "trabalho2.l"
+#line 126 "trabalho2.l"
 ECHO;
 	YY_BREAK
-#line 982 "lex.yy.c"
+#line 981 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ER_MANUTENCAO):
 case YY_STATE_EOF(ER_BATERIA):
@@ -1988,7 +1987,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 128 "trabalho2.l"
+#line 126 "trabalho2.l"
 
 
 
@@ -1998,5 +1997,5 @@ void yyfree (void * ptr )
 int main (void){
      yylex();
     printf("\nLocalização: %s \n\n", posicao);
-    printf("\n %s\n\n", teste);
+    
 }
