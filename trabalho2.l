@@ -5,8 +5,8 @@
     #include <stdio.h>
     #include <math.h>
 
-    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0,tarefas=0,perc_bateria;
-    char *materiais="", *instrucao="", *posicao="Posto de Carregamento", *linha="";
+    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0,tarefas=0,perc_bateria, quantidades[80], numrec=0;
+    char materiais[80], *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material="", *teste="";
 
 
 %}
@@ -57,33 +57,48 @@ ESTADO ESTADO
 
 <ER_BATERIA>\) BEGIN 0;
 
+
 {ENTREGA}\( BEGIN(ER_ENTREGA);
-<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   *linha = atoi(yytext);
-                                                                        *materiais = atoi(yytext);
-                                                                        quantidade=atoi(yytext);
+<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {    linha = strtok(yytext, ",");
+                                                                        material = strtok(NULL, ",");
+                                                                        quant_str = strtok(NULL, ")");
+                                                                        
+                                                                        quantidade=atoi(quant_str);
 
                                                                         
-                                                                        printf("%s",linha);
-                                                                        printf("%s",materiais);
-                                                                        printf("%d", quantidade);
+                                                                        printf("%s\n",linha);
+                                                                        printf("%s\n",material);
+                                                                        printf("%d\n", quantidade);
 
                                                                     }
 
 <ER_ENTREGA>\) BEGIN 0;
 
-{RECOLHE}\( BEGIN(ER_ENTREGA);
-<ER_RECOLHE>(\[\([A-Za-z0-9]{5},[1-9][0-9]*\)+\])                   {   *linha = atoi(yytext);
-                                                                        *materiais = atoi(yytext);
-                                                                        quantidade=atoi(yytext);
+
+{RECOLHE}\[ BEGIN(ER_RECOLHE);
+<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  
+                                                                                    
+                                                                        materiais = yytext;
+                                                                
+
+                                                                        for (int i; i<80;i++){
+                                                                            if (i>0){
+                                                                                teste = materiais[i]+materiais[i-1];
+                                                                            }
+                                                                            
+                                                                            if (teste="),"){
+                                                                                numrec+=1
+                                                                            }
+                                                                        }
+                                                                        
 
                                                                         
-                                                                        printf("%s",linha);
-                                                                        printf("%s",materiais);
-                                                                        printf("%d", quantidade);
+                                                                       
 
                                                                     }
 
-<ER_RECOLHE>\) BEGIN 0;
+<ER_RECOLHE>\] BEGIN 0;
+
 
 
 %%
