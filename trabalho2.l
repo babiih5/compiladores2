@@ -122,7 +122,6 @@ ESTADO ESTADO
 
 
 
-
 <ER_ESTADO>\) BEGIN 0; 
 
 %%
