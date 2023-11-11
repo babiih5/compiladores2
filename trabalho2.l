@@ -68,7 +68,6 @@ ESTADO ESTADO
                                                                         quant_str = strtok(NULL, ")");
                                                                         
                                                                         quantidade=atoi(quant_str);
-
                                                                         
                                                                         printf("linha de montagem: %s\n",linha);
                                                                         printf("Material: %s\n",material_entrega);
