@@ -840,6 +840,15 @@ case 2:
 YY_RULE_SETUP
 #line 25 "trabalho2.l"
 {    manutencao = atoi(yytext);
+
+
+                            if (posicao != "Posto de Manutencao"){
+                                perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                printf("%d", perc_bateria);
+                            }else{printf("%d", perc_bateria);}
+                            
+
+
                             if (manutencao==0){
                                 posicao="Posto de Manutencao";
                                 num_manutencao = num_manutencao + 1;
@@ -859,18 +868,24 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 44 "trabalho2.l"
+#line 53 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 47 "trabalho2.l"
+#line 56 "trabalho2.l"
 BEGIN(ER_BATERIA);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 48 "trabalho2.l"
-{    estado_bateria = atoi(yytext);
+#line 57 "trabalho2.l"
+{        estado_bateria = atoi(yytext);
+
+                            if (posicao != "Posto de Carregamento"){
+                                perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                printf("%d", perc_bateria);
+                            }else{printf("%d", perc_bateria);}
+
                             if (estado_bateria==0){
                                 posicao="Posto de Carregamento";
                                 estado_bateria=2;
@@ -889,22 +904,33 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 66 "trabalho2.l"
+#line 81 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 69 "trabalho2.l"
+#line 84 "trabalho2.l"
 BEGIN(ER_ENTREGA);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 70 "trabalho2.l"
+#line 85 "trabalho2.l"
 {    linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
                                                                         
                                                                         quantidade=atoi(quant_str);
+
+                                                                        if (posicao != "Linhas de Montagem"){
+                                                                            perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                                                            printf("%d", perc_bateria);
+                                                                        }else{
+                                                                            perc_bateria= perc_bateria - (perc_bateria*0,05)-(total_quantidade*0,01);
+                                                                            printf("%d", perc_bateria);
+                                                                            }
+                                                                        
+
+
 
                                                                         total_quantidade = total_quantidade - quantidade;
                                                                         
@@ -912,9 +938,7 @@ YY_RULE_SETUP
                                                                         printf("Material: %s\n",material_entrega);
                                                                         printf("Quantidade: %d\n", quantidade);
 
-
-                                                                        
-                                                                        posicao = "Fabrica";
+                                                                        posicao = "Linhas de Montagem";
 
                                                                         if (total_quantidade == 0){
                                                                             material_carro = "";
@@ -934,37 +958,41 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 102 "trabalho2.l"
+#line 126 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 105 "trabalho2.l"
+#line 129 "trabalho2.l"
 BEGIN(ER_RECOLHE);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 106 "trabalho2.l"
+#line 130 "trabalho2.l"
 {  
                                                                                     aux_material = strtok(yytext, ",");
                                                                                     material_carro = aux_material + 1;
 
                                                                                     quant_str = strtok(NULL, ")");
                                                                                     quantidade=atoi(quant_str);
-
+                                                                                    
                                                                                     if(tarefas>0){
                                                                                         total_quantidade = total_quantidade + quantidade;
                                                                                     
                                                                                     }
                                                                                     else if (tarefas == 0) {
                                                                                         total_quantidade = quantidade;
+                                                                                        tarefas = tarefas + 1;
                                                                                     }
 
 
                                                                                     printf("Material: %s\n",material_carro);
                                                                                     printf("Quantidade: %d\n", quantidade);
+                                                                                    if (posicao != "Armazem"){
+                                                                                        perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                                                                        printf("%d", perc_bateria);
+                                                                                    }else{printf("%d", perc_bateria);}
                                                                                     
-                                                                                    tarefas = tarefas + 1;
                                                                                     posicao = "Armazem";
 
                                                                                     printf("\n----------------------------------\n");
@@ -982,17 +1010,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 144 "trabalho2.l"
+#line 172 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 147 "trabalho2.l"
+#line 175 "trabalho2.l"
 BEGIN(ER_ESTADO);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 148 "trabalho2.l"
+#line 176 "trabalho2.l"
 {  aux_estado = yytext;
 
                                                     if (strcmp(aux_estado, "B") == 0){
@@ -1012,15 +1040,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 167 "trabalho2.l"
+#line 195 "trabalho2.l"
 BEGIN 0; 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 169 "trabalho2.l"
+#line 197 "trabalho2.l"
 ECHO;
 	YY_BREAK
-#line 1024 "lex.yy.c"
+#line 1052 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ER_MANUTENCAO):
 case YY_STATE_EOF(ER_BATERIA):
@@ -2030,7 +2058,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 169 "trabalho2.l"
+#line 197 "trabalho2.l"
 
 
 

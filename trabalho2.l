@@ -23,6 +23,15 @@ ESTADO ESTADO
 %%
 {MANUTENCAO}\( BEGIN(ER_MANUTENCAO);
 <ER_MANUTENCAO>([0-2]) {    manutencao = atoi(yytext);
+
+
+                            if (posicao != "Posto de Manutencao"){
+                                perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                printf("%d", perc_bateria);
+                            }else{printf("%d", perc_bateria);}
+                            
+
+
                             if (manutencao==0){
                                 posicao="Posto de Manutencao";
                                 num_manutencao = num_manutencao + 1;
@@ -45,15 +54,23 @@ ESTADO ESTADO
 
 
 {CARREGA-BATERIA}\( BEGIN(ER_BATERIA);
-<ER_BATERIA>([0-2]) {    estado_bateria = atoi(yytext);
+<ER_BATERIA>([0-2]) {        estado_bateria = atoi(yytext);
+
+                            if (posicao != "Posto de Carregamento"){
+                                perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                printf("%d", perc_bateria);
+                            }else{printf("%d", perc_bateria);}
+
                             if (estado_bateria==0){
                                 posicao="Posto de Carregamento";
+                                perc_bateria=100;
                                 estado_bateria=2;
                                 
                             }
                             else if (estado_bateria==1){
                                 if (tarefas==0){
                                     posicao="Posto de Carregamento";
+                                    perc_bateria=100;
                                     estado_bateria=2;
                                 }
 
@@ -73,15 +90,23 @@ ESTADO ESTADO
                                                                         
                                                                         quantidade=atoi(quant_str);
 
+                                                                        if (posicao != "Linhas de Montagem"){
+                                                                            perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                                                            printf("%d", perc_bateria);
+                                                                        }else{
+                                                                            perc_bateria= perc_bateria - (perc_bateria*0,05)-(total_quantidade*0,01);
+                                                                            printf("%d", perc_bateria);
+                                                                            }
+                                                                        
+
+
                                                                         total_quantidade = total_quantidade - quantidade;
                                                                         
                                                                         printf("linha de montagem: %s\n",linha);
                                                                         printf("Material: %s\n",material_entrega);
                                                                         printf("Quantidade: %d\n", quantidade);
 
-
-                                                                        
-                                                                        posicao = "Fabrica";
+                                                                        posicao = "Linhas de Montagem";
 
                                                                         if (total_quantidade == 0){
                                                                             material_carro = "";
@@ -109,7 +134,7 @@ ESTADO ESTADO
 
                                                                                     quant_str = strtok(NULL, ")");
                                                                                     quantidade=atoi(quant_str);
-
+                                                                                    
                                                                                     if(tarefas>0){
                                                                                         total_quantidade = total_quantidade + quantidade;
                                                                                     
@@ -122,7 +147,10 @@ ESTADO ESTADO
 
                                                                                     printf("Material: %s\n",material_carro);
                                                                                     printf("Quantidade: %d\n", quantidade);
-                                                                                    
+                                                                                    if (posicao != "Armazem"){
+                                                                                        perc_bateria= perc_bateria - (perc_bateria*0.1) - (total_quantidade*0,01);
+                                                                                        printf("%d", perc_bateria);
+                                                                                    }else{printf("%d", perc_bateria);}
                                                                                     
                                                                                     posicao = "Armazem";
 
