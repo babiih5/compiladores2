@@ -6,9 +6,9 @@
     #include <math.h>
     #include <string.h>
 
-    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, perc_bateria, total_quantidade;
-    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="", *id_estado="",*aux_material="", *aux_estado="", *total_materiais="";
-
+    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, perc_bateria=100, total_quantidade=0;
+    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="",*aux_material="", *aux_estado="", *total_materiais="";
+    
 
 %}
 
@@ -26,11 +26,13 @@ ESTADO ESTADO
                             if (manutencao==0){
                                 posicao="Posto de Manutencao";
                                 num_manutencao = num_manutencao + 1;
+                                manutencao=2;
                             }
                             else if (manutencao==1){
                                 if (tarefas==0){
                                     posicao="Posto de Manutencao";
                                     num_manutencao = num_manutencao + 1;
+                                    manutencao=2;
                                 }
 
                             }
@@ -46,11 +48,13 @@ ESTADO ESTADO
 <ER_BATERIA>([0-2]) {    estado_bateria = atoi(yytext);
                             if (estado_bateria==0){
                                 posicao="Posto de Carregamento";
+                                estado_bateria=2;
                                 
                             }
                             else if (estado_bateria==1){
                                 if (tarefas==0){
                                     posicao="Posto de Carregamento";
+                                    estado_bateria=2;
                                 }
 
                             }
@@ -94,13 +98,10 @@ ESTADO ESTADO
 
                                                                                     if(tarefas>0){
                                                                                         total_quantidade = total_quantidade + quantidade;
-                                                                                        strcat(total_materiais, ",");
-                                                                                        strcat(total_materiais, material_carro);
+                                                                                    
                                                                                     }
                                                                                     else if (tarefas == 0) {
                                                                                         total_quantidade = quantidade;
-                                                                                        total_materiais = "";
-                                                                                        strcat(total_materiais, material_carro);
                                                                                     }
 
 
@@ -154,7 +155,7 @@ int main (void){
      printf("\n----------------------------------\n");
      printf("Estado da Bateria: %d \n", estado_bateria);
     printf("Localização: %s \n", posicao);
-    printf("Materiais: %s \n", total_materiais);
+    printf("Materiais: %s \n", material_carro);
     printf("Quantidade: %d \n", total_quantidade);
     printf("Vezes que foi a manutencao: %d \n", num_manutencao);
     printf("----------------------------------\n\n");
