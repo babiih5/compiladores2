@@ -906,32 +906,45 @@ YY_RULE_SETUP
                                                                         
                                                                         quantidade=atoi(quant_str);
 
+                                                                        total_quantidade = total_quantidade - quantidade;
                                                                         
                                                                         printf("linha de montagem: %s\n",linha);
                                                                         printf("Material: %s\n",material_entrega);
                                                                         printf("Quantidade: %d\n", quantidade);
 
 
-                                                                        quantidade = 0;
-                                                                        material_carro = "";
-                                                                        tarefas = tarefas - 1;
+                                                                        
                                                                         posicao = "Fabrica";
+
+                                                                        if (total_quantidade == 0){
+                                                                            material_carro = "";
+                                                                            tarefas = tarefas - 1;
+                                                                        }
+                                                                        else {material_carro = material_entrega;}
+
+                                                                        printf("\n----------------------------------\n");
+                                                                        printf("Estado da Bateria: %d \n", estado_bateria);
+                                                                        printf("Localização: %s \n", posicao);
+                                                                        printf("Materiais: %s \n", material_carro);
+                                                                        printf("Quantidade: %d \n", total_quantidade);
+                                                                        printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+                                                                        printf("----------------------------------\n\n");
 
                                                                     }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 89 "trabalho2.l"
+#line 102 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 92 "trabalho2.l"
+#line 105 "trabalho2.l"
 BEGIN(ER_RECOLHE);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 93 "trabalho2.l"
+#line 106 "trabalho2.l"
 {  
                                                                                     aux_material = strtok(yytext, ",");
                                                                                     material_carro = aux_material + 1;
@@ -953,6 +966,14 @@ YY_RULE_SETUP
                                                                                     
                                                                                     tarefas = tarefas + 1;
                                                                                     posicao = "Armazem";
+
+                                                                                    printf("\n----------------------------------\n");
+                                                                                    printf("Estado da Bateria: %d \n", estado_bateria);
+                                                                                    printf("Localização: %s \n", posicao);
+                                                                                    printf("Materiais: %s \n", material_carro);
+                                                                                    printf("Quantidade: %d \n", total_quantidade);
+                                                                                    printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+                                                                                    printf("----------------------------------\n\n");
                                                                                     
 
                                                                        
@@ -961,17 +982,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 123 "trabalho2.l"
+#line 144 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 126 "trabalho2.l"
+#line 147 "trabalho2.l"
 BEGIN(ER_ESTADO);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 127 "trabalho2.l"
+#line 148 "trabalho2.l"
 {  aux_estado = yytext;
 
                                                     if (strcmp(aux_estado, "B") == 0){
@@ -991,15 +1012,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 146 "trabalho2.l"
+#line 167 "trabalho2.l"
 BEGIN 0; 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 148 "trabalho2.l"
+#line 169 "trabalho2.l"
 ECHO;
 	YY_BREAK
-#line 1003 "lex.yy.c"
+#line 1024 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ER_MANUTENCAO):
 case YY_STATE_EOF(ER_BATERIA):
@@ -2009,7 +2030,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 148 "trabalho2.l"
+#line 169 "trabalho2.l"
 
 
 
@@ -2020,10 +2041,10 @@ int main (void){
      yylex();
      printf("\n----------------------------------\n");
      printf("Estado da Bateria: %d \n", estado_bateria);
-    printf("Localização: %s \n", posicao);
-    printf("Materiais: %s \n", material_carro);
-    printf("Quantidade: %d \n", total_quantidade);
-    printf("Vezes que foi a manutencao: %d \n", num_manutencao);
-    printf("----------------------------------\n\n");
+     printf("Localização: %s \n", posicao);
+     printf("Materiais: %s \n", material_carro);
+     printf("Quantidade: %d \n", total_quantidade);
+     printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+     printf("----------------------------------\n\n");
     
 }

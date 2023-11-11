@@ -72,16 +72,30 @@ ESTADO ESTADO
                                                                         quant_str = strtok(NULL, ")");
                                                                         
                                                                         quantidade=atoi(quant_str);
+
+                                                                        total_quantidade = total_quantidade - quantidade;
                                                                         
                                                                         printf("linha de montagem: %s\n",linha);
                                                                         printf("Material: %s\n",material_entrega);
                                                                         printf("Quantidade: %d\n", quantidade);
 
 
-                                                                        quantidade = 0;
-                                                                        material_carro = "";
-                                                                        tarefas = tarefas - 1;
+                                                                        
                                                                         posicao = "Fabrica";
+
+                                                                        if (total_quantidade == 0){
+                                                                            material_carro = "";
+                                                                            tarefas = tarefas - 1;
+                                                                        }
+                                                                        else {material_carro = material_entrega;}
+
+                                                                        printf("\n----------------------------------\n");
+                                                                        printf("Estado da Bateria: %d \n", estado_bateria);
+                                                                        printf("Localização: %s \n", posicao);
+                                                                        printf("Materiais: %s \n", material_carro);
+                                                                        printf("Quantidade: %d \n", total_quantidade);
+                                                                        printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+                                                                        printf("----------------------------------\n\n");
 
                                                                     }
 
@@ -102,14 +116,23 @@ ESTADO ESTADO
                                                                                     }
                                                                                     else if (tarefas == 0) {
                                                                                         total_quantidade = quantidade;
+                                                                                        tarefas = tarefas + 1;
                                                                                     }
 
 
                                                                                     printf("Material: %s\n",material_carro);
                                                                                     printf("Quantidade: %d\n", quantidade);
                                                                                     
-                                                                                    tarefas = tarefas + 1;
+                                                                                    
                                                                                     posicao = "Armazem";
+
+                                                                                    printf("\n----------------------------------\n");
+                                                                                    printf("Estado da Bateria: %d \n", estado_bateria);
+                                                                                    printf("Localização: %s \n", posicao);
+                                                                                    printf("Materiais: %s \n", material_carro);
+                                                                                    printf("Quantidade: %d \n", total_quantidade);
+                                                                                    printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+                                                                                    printf("----------------------------------\n\n");
                                                                                     
 
                                                                        
@@ -154,10 +177,10 @@ int main (void){
      yylex();
      printf("\n----------------------------------\n");
      printf("Estado da Bateria: %d \n", estado_bateria);
-    printf("Localização: %s \n", posicao);
-    printf("Materiais: %s \n", material_carro);
-    printf("Quantidade: %d \n", total_quantidade);
-    printf("Vezes que foi a manutencao: %d \n", num_manutencao);
-    printf("----------------------------------\n\n");
+     printf("Localização: %s \n", posicao);
+     printf("Materiais: %s \n", material_carro);
+     printf("Quantidade: %d \n", total_quantidade);
+     printf("Vezes que foi a manutencao: %d \n", num_manutencao);
+     printf("----------------------------------\n\n");
     
 }
