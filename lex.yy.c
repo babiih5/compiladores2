@@ -545,9 +545,9 @@ char *yytext;
     #include <math.h>
     #include <string.h>
 
-    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, total_quantidade=0, bateria_necessaria=0,aux_quant=0;
+    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, total_quantidade=0;
     char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="",*aux_material="", *aux_estado="", *total_materiais="";
-    float perc_bateria=100;
+    float perc_bateria=100.0,aux_quant=0.0,bateria_necessaria=0.0;
 
 #line 553 "lex.yy.c"
 #line 554 "lex.yy.c"
@@ -932,30 +932,37 @@ YY_RULE_SETUP
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
                                                                         quantidade=atoi(quant_str);
-                                                                        aux_quant=total_quantidade+quantidade;
+                                                                        aux_quant=total_quantidade;
+                                                                        
 
 
                                                                         if (posicao != "Linhas de Montagem"){
                                                                             bateria_necessaria= (100*0.1) + (aux_quant*0,01);
-                                                                        }else{bateria_necessaria=(100*0,05)+(total_quantidade*0,01);}
-
-                                                                        if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
-                                                                            estado_bateria=0;
-                                                                        }else if(posicao=="Linhas de Montagem"){
-                                                                            if (perc_bateria > 21.6 && perc_bateria <= 27.4){
-                                                                                estado_bateria=1;
-                                                                            }else if(perc_bateria > 27.4){
-                                                                            estado_bateria=2;
-                                                                        }
-                                                                        }
-                                                                        else if (posicao!="Linhas de Montagem"){
-                                                                            if (perc_bateria > 21.6 && perc_bateria <= 32.4){
+                                                                             if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
+                                                                                estado_bateria=0;
+                                                                            }else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
                                                                                 estado_bateria=1;
                                                                             }else if(perc_bateria > 32.4){
-                                                                            estado_bateria=2;
+                                                                                estado_bateria=2;
+                                                                            }
+
+                                                                        }else{
+                                                                            bateria_necessaria=(100*0,05)+(total_quantidade*0,01);
+                                                                             if (perc_bateria >= 10.8 && perc_bateria <= 16.6){
+                                                                                estado_bateria=0;
+                                                                            }else if(perc_bateria > 16.6 && perc_bateria <= 22.4){
+                                                                                estado_bateria=1;
+                                                                            }else if(perc_bateria > 22.4){
+                                                                                estado_bateria=2;
                                                                         }
-                                                                        }  
-                                                                      
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            }
+                                                                        
+
+                                                                       
 
                                                                         if (estado_bateria==0){
                                                                                         printf("\nAtencao! Bateria insuficiente, por favor enviar para o posto de carregamento!\n");
@@ -1005,23 +1012,23 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 173 "trabalho2.l"
+#line 180 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 176 "trabalho2.l"
+#line 183 "trabalho2.l"
 BEGIN(ER_RECOLHE);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 177 "trabalho2.l"
+#line 184 "trabalho2.l"
 {  aux_material = strtok(yytext, ",");
                                                                                     material_carro = aux_material + 1;
 
                                                                                     quant_str = strtok(NULL, ")");
                                                                                     quantidade=atoi(quant_str);
-                                                                                    aux_quant=total_quantidade + quantidade;
+                                                                                    aux_quant=total_quantidade;
                                                                         
     
                                                                                     if (posicao != "Armazem"){
@@ -1081,17 +1088,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 243 "trabalho2.l"
+#line 250 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 246 "trabalho2.l"
+#line 253 "trabalho2.l"
 BEGIN(ER_ESTADO);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 247 "trabalho2.l"
+#line 254 "trabalho2.l"
 {  aux_estado = yytext;
 
                                                     if (strcmp(aux_estado, "B") == 0){
@@ -1111,15 +1118,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 266 "trabalho2.l"
+#line 273 "trabalho2.l"
 BEGIN 0; 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 268 "trabalho2.l"
+#line 275 "trabalho2.l"
 ECHO;
 	YY_BREAK
-#line 1123 "lex.yy.c"
+#line 1130 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ER_MANUTENCAO):
 case YY_STATE_EOF(ER_BATERIA):
@@ -2129,7 +2136,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 268 "trabalho2.l"
+#line 275 "trabalho2.l"
 
 
 

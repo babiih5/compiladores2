@@ -6,9 +6,9 @@
     #include <math.h>
     #include <string.h>
 
-    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, total_quantidade=0, bateria_necessaria=0,aux_quant=0;
+    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, total_quantidade=0;
     char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="",*aux_material="", *aux_estado="", *total_materiais="";
-    float perc_bateria=100;
+    float perc_bateria=100.0,aux_quant=0.0,bateria_necessaria=0.0;
 
 %}
 
@@ -99,20 +99,37 @@ ESTADO ESTADO
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
                                                                         quantidade=atoi(quant_str);
-                                                                        aux_quant=total_quantidade+quantidade;
+                                                                        aux_quant=total_quantidade;
+                                                                        
 
 
                                                                         if (posicao != "Linhas de Montagem"){
                                                                             bateria_necessaria= (100*0.1) + (aux_quant*0,01);
-                                                                        }else{bateria_necessaria=(100*0,05)+(total_quantidade*0,01);}
+                                                                             if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
+                                                                                estado_bateria=0;
+                                                                            }else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
+                                                                                estado_bateria=1;
+                                                                            }else if(perc_bateria > 32.4){
+                                                                                estado_bateria=2;
+                                                                            }
 
-                                                                        if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
-                                                                            estado_bateria=0;
-                                                                        }else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
-                                                                            estado_bateria=1;
-                                                                        }else if(perc_bateria > 32.4){
-                                                                            estado_bateria=2;
+                                                                        }else{
+                                                                            bateria_necessaria=(100*0,05)+(total_quantidade*0,01);
+                                                                             if (perc_bateria >= 10.8 && perc_bateria <= 16.6){
+                                                                                estado_bateria=0;
+                                                                            }else if(perc_bateria > 16.6 && perc_bateria <= 22.4){
+                                                                                estado_bateria=1;
+                                                                            }else if(perc_bateria > 22.4){
+                                                                                estado_bateria=2;
                                                                         }
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            }
+                                                                        
+
+                                                                       
 
                                                                         if (estado_bateria==0){
                                                                                         printf("\nAtencao! Bateria insuficiente, por favor enviar para o posto de carregamento!\n");
@@ -169,7 +186,7 @@ ESTADO ESTADO
 
                                                                                     quant_str = strtok(NULL, ")");
                                                                                     quantidade=atoi(quant_str);
-                                                                                    aux_quant=total_quantidade + quantidade;
+                                                                                    aux_quant=total_quantidade;
                                                                         
     
                                                                                     if (posicao != "Armazem"){
