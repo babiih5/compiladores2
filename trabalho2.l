@@ -6,8 +6,8 @@
     #include <math.h>
     #include <string.h>
 
-    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, perc_bateria;
-    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="", *id_estado="",*aux_material="", *aux_estado="";
+    int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, perc_bateria, total_quantidade;
+    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="", *id_estado="",*aux_material="", *aux_estado="", *total_materiais="";
 
 
 %}
@@ -77,7 +77,7 @@ ESTADO ESTADO
 
                                                                         quantidade = 0;
                                                                         material_carro = "";
-                                                                        tarefas = 0;
+                                                                        tarefas = tarefas - 1;
                                                                         posicao = "Fabrica";
 
                                                                     }
@@ -86,11 +86,24 @@ ESTADO ESTADO
 
 
 {RECOLHE}\[ BEGIN(ER_RECOLHE);
-<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  aux_material = strtok(yytext, ",");
+<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  
+                                                                                    aux_material = strtok(yytext, ",");
                                                                                     material_carro = aux_material + 1;
 
                                                                                     quant_str = strtok(NULL, ")");
                                                                                     quantidade=atoi(quant_str);
+
+                                                                                    if(tarefas>0){
+                                                                                        total_quantidade = total_quantidade + quantidade;
+                                                                                        strcat(total_materiais, ",");
+                                                                                        strcat(total_materiais, material_carro);
+                                                                                    }
+                                                                                    else if (tarefas == 0) {
+                                                                                        total_quantidade = quantidade;
+                                                                                        total_materiais = "";
+                                                                                        strcat(total_materiais, material_carro);
+                                                                                    }
+
 
                                                                                     printf("Material: %s\n",material_carro);
                                                                                     printf("Quantidade: %d\n", quantidade);
@@ -98,6 +111,7 @@ ESTADO ESTADO
                                                                                     tarefas = tarefas + 1;
                                                                                     posicao = "Armazem";
                                                                                     
+
                                                                        
                                                                         
                                                                         }
@@ -141,8 +155,8 @@ int main (void){
      printf("\n----------------------------------\n");
      printf("Estado da Bateria: %d \n", estado_bateria);
     printf("Localização: %s \n", posicao);
-    printf("Materiais: %s \n", material_carro);
-    printf("Quantidade: %d \n", quantidade);
+    printf("Materiais: %s \n", total_materiais);
+    printf("Quantidade: %d \n", total_quantidade);
     printf("Vezes que foi a manutencao: %d \n", num_manutencao);
     printf("----------------------------------\n\n");
     
