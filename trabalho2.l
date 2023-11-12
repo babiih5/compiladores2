@@ -30,7 +30,6 @@ ESTADO ESTADO
                             }else{printf("%f", perc_bateria);}
                             
 
-
                             if (manutencao==0){
                                 posicao="Posto de Manutencao";
                                 num_manutencao = num_manutencao + 1;
@@ -52,6 +51,13 @@ ESTADO ESTADO
                             printf("Vezes que foi a manutencao: %d \n", num_manutencao);
                             printf("----------------------------------\n\n");
 
+                            if (num_manutencao > 3) {
+                                printf("Atencao! O veículo foi chamado a manutencao mais de 3 vezes");
+                                if (num_manutencao > 0 && (num_manutencao % 3) == 0) {
+                                    printf("Atencao! O veiculo foi chamado a manutencao um número multiplo de 3 vezes");
+                                }
+                            }
+            
                          }
 
 
@@ -60,6 +66,10 @@ ESTADO ESTADO
 
 {CARREGA-BATERIA}\( BEGIN(ER_BATERIA);
 <ER_BATERIA>([0-2]) {        estado_bateria = atoi(yytext);
+
+                            if (estado_bateria == 2 && perc_bateria == 100) {
+                                printf("A bateria está completamente carregada, não é necessário um novo carregamento");
+                            }
 
                             if (posicao != "Posto de Carregamento"){
                                 perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0,01);
@@ -101,7 +111,13 @@ ESTADO ESTADO
                                                                         quantidade=atoi(quant_str);
                                                                         aux_quant=total_quantidade;
                                                                         
-
+                                                                        if (strcmp(material_entrega, material_carro) != 0) {
+                                                                            printf("Atencao! Este tipo de material nao esta a ser transportado, impossivel realizar a entrega!");
+                                                                        }
+                                                                        if (total_quantidade != quantidade) {
+                                                                            printf("Atencao! Esta quantidade de material nao esta a ser transportada, impossivel realizar a entrega!");
+                                                                        }
+                                                
 
                                                                         if (posicao != "Linhas de Montagem"){
                                                                             bateria_necessaria= (100*0.1) + (aux_quant*0,01);
@@ -166,6 +182,11 @@ ESTADO ESTADO
 
                                                                             
                                                                         }
+
+                                                                        if (total_quantidade + quantidade > 80) {
+                                                                            printf("Atencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
+                                                                        } 
+
                                                                         printf("\n----------------------------------\n");
                                                                             printf("Estado da Bateria: %d \n", estado_bateria);
                                                                             printf("Localização: %s \n", posicao);
@@ -232,6 +253,10 @@ ESTADO ESTADO
                                                                                         
                                                                                     }
                                                                                     
+                                                                                    if (total_quantidade + quantidade > 80) {
+                                                                                        printf("Atencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
+                                                                                    } 
+
                                                                                     printf("\n----------------------------------\n");
                                                                                         printf("Estado da Bateria: %d \n", estado_bateria);
                                                                                         printf("Localização: %s \n", posicao);
@@ -281,6 +306,7 @@ ESTADO ESTADO
 int main (void){
      yylex();
      printf("\n----------------------------------\n");
+     printf("ESTADO FINAL DO VEICULO\n");
      printf("Estado da Bateria: %d \n", estado_bateria);
      printf("Localização: %s \n", posicao);
      printf("Materiais: %s \n", material_carro);
