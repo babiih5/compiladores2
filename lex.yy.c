@@ -871,7 +871,7 @@ YY_RULE_SETUP
                                 }
                             }
 
-                            printf("\n----------------------------------\n");
+                            printf("\n----------------------------------");
                             printf("\nEstado da Bateria: %d ", estado_bateria);
                             printf("\nLocalização: %s", posicao);
                             printf("\nMateriais: %s", material_carro);
@@ -918,7 +918,7 @@ YY_RULE_SETUP
                                 }
 
                             }
-                            printf("\n----------------------------------\n");
+                            printf("\n----------------------------------");
                             printf("\nEstado da Bateria: %d ", estado_bateria);
                             printf("\nLocalização: %s", posicao);
                             printf("\nMateriais: %s", material_carro);
@@ -1025,7 +1025,7 @@ YY_RULE_SETUP
                                                                             
                                                                         }
                                                                                                                                                
-                                                                        printf("\n----------------------------------\n");
+                                                                        printf("\n----------------------------------");
                                                                         printf("\nEstado da Bateria: %d ", estado_bateria);
                                                                         printf("\nLocalização: %s", posicao);
                                                                         printf("\nMateriais: %s", material_carro);
@@ -1110,7 +1110,7 @@ YY_RULE_SETUP
                                                                                     
                                                                                     }
 
-                                                                                    printf("\n----------------------------------\n");
+                                                                                    printf("\n----------------------------------");
                                                                                     printf("\nEstado da Bateria: %d ", estado_bateria);
                                                                                     printf("\nLocalização: %s", posicao);
                                                                                     printf("\nMateriais: %s", material_carro);
