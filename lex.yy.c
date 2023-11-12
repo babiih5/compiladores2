@@ -892,7 +892,7 @@ YY_RULE_SETUP
 #line 68 "trabalho2.l"
 {        estado_bateria = atoi(yytext);
 
-                            if (estado_bateria == 2 && perc_bateria == 100) {
+                            if (perc_bateria == 100) {
                                 printf("A bateria está completamente carregada, não é necessário um novo carregamento");
                             }
 

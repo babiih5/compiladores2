@@ -67,7 +67,7 @@ ESTADO ESTADO
 {CARREGA-BATERIA}\( BEGIN(ER_BATERIA);
 <ER_BATERIA>([0-2]) {        estado_bateria = atoi(yytext);
 
-                            if (estado_bateria == 2 && perc_bateria == 100) {
+                            if (perc_bateria == 100) {
                                 printf("A bateria está completamente carregada, não é necessário um novo carregamento");
                             }
 
