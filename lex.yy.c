@@ -364,18 +364,18 @@ static const flex_int16_t yy_accept[126] =
     {   0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,   17,   16,   16,   16,   16,   16,    3,    2,
-        6,    5,    9,   16,   16,   12,   15,   16,   14,    0,
+        6,    5,   12,   16,   16,    9,   15,   16,   14,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,   13,    0,    0,    0,    0,    0,
-        0,    7,    0,   10,    0,    0,    0,    0,    0,    0,
-       11,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,   10,    0,    7,    0,    0,    0,    0,    0,    0,
+        8,    0,    0,    0,    0,    0,    0,    0,    0,    0,
 
-        8,    0,    0,    0,    1,    8,    0,    0,    0,    0,
+       11,    0,    0,    0,    1,   11,    0,    0,    0,    0,
         0,    0,    0,   14,    0,    0,    0,    4,    0,   14,
-        0,    0,   11,    0,    0
+        0,    0,    8,    0,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -938,12 +938,93 @@ BEGIN 0;
 case 7:
 YY_RULE_SETUP
 #line 112 "trabalho2.l"
-BEGIN(ER_ENTREGA);
+BEGIN(ER_RECOLHE);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 113 "trabalho2.l"
-{    aux_matcarro = material_entrega;
+{  material_carro = strtok(yytext, ",");
+
+                                                                                    quant_str = strtok(NULL, ")");
+                                                                                    quantidade=atoi(quant_str);
+                                                                                    aux_quant=total_quantidade;
+
+                                                                                    if (total_quantidade + quantidade > 80) {
+                                                                                        printf("\nAtencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
+                                                                                    } 
+                                                                                    else{
+                                                                                        if (posicao != "Armazem"){
+                                                                                        bateria_necessaria= (100*0.1) + (aux_quant*0,01);
+                                                                                        }
+                                                                                        else{
+                                                                                            bateria_necessaria=0;
+                                                                                        }
+    
+                                                                                        if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
+                                                                                            estado_bateria=0;
+                                                                                        }
+                                                                                        else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
+                                                                                            estado_bateria=1;
+                                                                                        }
+                                                                                        else if(perc_bateria > 32.4){
+                                                                                            estado_bateria=2;
+                                                                                        }
+        
+
+                                                                                        if (estado_bateria==0){
+                                                                                            printf("\nAtencao! Bateria insuficiente, por favor enviar para o posto de carregamento!");
+                                                                                        }
+                                                                                        else if(estado_bateria==1 || estado_bateria==2){
+                                                                                            if (estado_bateria==1){
+                                                                                                printf("\nNo final desta acao, a bateria será insuficiente. Por favor, enviar para o posto de carregamento");
+                                                                                            }
+
+                                                                                        
+                                                                                            if(tarefas>0){
+                                                                                                total_quantidade = total_quantidade + quantidade;
+                                                                                            }
+                                                                                            else if (tarefas == 0) {
+                                                                                                total_quantidade = quantidade;
+                                                                                                tarefas = tarefas + 1;
+                                                                                            }
+
+                                                                                            printf("\nMaterial: %s",material_carro);
+                                                                                            printf("\nQuantidade: %d", quantidade);
+
+                                                                                            if (posicao != "Armazem"){
+                                                                                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0,01);
+                                                                                            }
+                                                                                            
+                                                                                            posicao = "Armazem";
+
+                                                                                        }
+                                                                                    
+                                                                                    }
+
+                                                                                    printf("\n----------------------------------");
+                                                                                    printf("\nEstado da Bateria: %d ", estado_bateria);
+                                                                                    printf("\nLocalização: %s", posicao);
+                                                                                    printf("\nMateriais: %s", material_carro);
+                                                                                    printf("\nQuantidade: %d", total_quantidade);
+                                                                                    printf("\nVezes que foi a manutencao: %d", num_manutencao);
+                                                                                    printf("\n----------------------------------\n\n");
+
+                                                                                }
+	YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 184 "trabalho2.l"
+BEGIN 0;
+	YY_BREAK
+case 10:
+YY_RULE_SETUP
+#line 186 "trabalho2.l"
+BEGIN(ER_ENTREGA);
+	YY_BREAK
+case 11:
+YY_RULE_SETUP
+#line 187 "trabalho2.l"
+{   printf("\n\nMateria carro: %s \n\n", material_carro);
                                                                         linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
@@ -954,7 +1035,7 @@ YY_RULE_SETUP
                                                                         if (total_quantidade < quantidade) {
                                                                             printf("\nAtencao! Esta quantidade de material nao esta a ser transportada, impossivel realizar a entrega!");
                                                                         }
-                                                                        else if (strcmp(material_entrega, material_carro) != 0) {
+                                                                        else if (strcmp(material_carro, material_entrega) != 0) {
                                                                             printf("\nAtencao! Este tipo de material nao esta a ser transportado, impossivel realizar a entrega!");
                                                                         }
                                                                         else{
@@ -1037,102 +1118,19 @@ YY_RULE_SETUP
                                                                         }
                                                                     }
 	YY_BREAK
-case 9:
-YY_RULE_SETUP
-#line 207 "trabalho2.l"
-BEGIN 0;
-	YY_BREAK
-case 10:
-YY_RULE_SETUP
-#line 210 "trabalho2.l"
-BEGIN(ER_RECOLHE);
-	YY_BREAK
-case 11:
-YY_RULE_SETUP
-#line 211 "trabalho2.l"
-{  aux_material = strtok(yytext, ",");
-
-                                                                                    quant_str = strtok(NULL, ")");
-                                                                                    quantidade=atoi(quant_str);
-                                                                                    aux_quant=total_quantidade;
-
-                                                                                    if (total_quantidade + quantidade > 80) {
-                                                                                        printf("\nAtencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
-                                                                                    } 
-                                                                                    else{
-                                                                                        if (posicao != "Armazem"){
-                                                                                        bateria_necessaria= (100*0.1) + (aux_quant*0,01);
-                                                                                        }
-                                                                                        else{
-                                                                                            bateria_necessaria=0;
-                                                                                        }
-    
-                                                                                        if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
-                                                                                            estado_bateria=0;
-                                                                                        }
-                                                                                        else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
-                                                                                            estado_bateria=1;
-                                                                                        }
-                                                                                        else if(perc_bateria > 32.4){
-                                                                                            estado_bateria=2;
-                                                                                        }
-        
-
-                                                                                        if (estado_bateria==0){
-                                                                                            printf("\nAtencao! Bateria insuficiente, por favor enviar para o posto de carregamento!");
-                                                                                        }
-                                                                                        else if(estado_bateria==1 || estado_bateria==2){
-                                                                                            if (estado_bateria==1){
-                                                                                                printf("\nNo final desta acao, a bateria será insuficiente. Por favor, enviar para o posto de carregamento");
-                                                                                            }
-
-                                                                                            material_carro = aux_material + 1;
-                                                                                        
-                                                                                            if(tarefas>0){
-                                                                                                total_quantidade = total_quantidade + quantidade;
-                                                                                            }
-                                                                                            else if (tarefas == 0) {
-                                                                                                total_quantidade = quantidade;
-                                                                                                tarefas = tarefas + 1;
-                                                                                            }
-
-                                                                                            printf("\nMaterial: %s",material_carro);
-                                                                                            printf("\nQuantidade: %d", quantidade);
-
-                                                                                            if (posicao != "Armazem"){
-                                                                                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0,01);
-                                                                                            }
-                                                                                            
-                                                                                            posicao = "Armazem";
-
-                                                                                            
-                                                                                        }
-                                                                                    
-                                                                                    }
-
-                                                                                    printf("\n----------------------------------");
-                                                                                    printf("\nEstado da Bateria: %d ", estado_bateria);
-                                                                                    printf("\nLocalização: %s", posicao);
-                                                                                    printf("\nMateriais: %s", material_carro);
-                                                                                    printf("\nQuantidade: %d", total_quantidade);
-                                                                                    printf("\nVezes que foi a manutencao: %d", num_manutencao);
-                                                                                    printf("\n----------------------------------\n\n");
-
-                                                                                }
-	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 284 "trabalho2.l"
+#line 281 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 287 "trabalho2.l"
+#line 283 "trabalho2.l"
 BEGIN(ER_ESTADO);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 288 "trabalho2.l"
+#line 284 "trabalho2.l"
 {    aux_estado = yytext;
 
                                                                             if (strcmp(aux_estado, "B") == 0){
@@ -1152,15 +1150,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 307 "trabalho2.l"
+#line 303 "trabalho2.l"
 BEGIN 0; 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 309 "trabalho2.l"
+#line 305 "trabalho2.l"
 ECHO;
 	YY_BREAK
-#line 1164 "lex.yy.c"
+#line 1162 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ER_MANUTENCAO):
 case YY_STATE_EOF(ER_BATERIA):
@@ -2170,7 +2168,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 309 "trabalho2.l"
+#line 305 "trabalho2.l"
 
 
 
