@@ -7,7 +7,7 @@
     #include <string.h>
 
     int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, total_quantidade=0;
-    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="",*aux_material="", *aux_estado="", *total_materiais="";
+    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="",*aux_material="", *aux_estado="", *total_materiais="",*aux_matcarro="";
     float perc_bateria=100.0,aux_quant=0.0,bateria_necessaria=0.0;
 
 %}
@@ -51,10 +51,13 @@ ESTADO ESTADO
                             printf("Vezes que foi a manutencao: %d \n", num_manutencao);
                             printf("----------------------------------\n\n");
 
-                            if (num_manutencao > 3) {
-                                printf("Atencao! O veículo foi chamado a manutencao mais de 3 vezes");
-                                if (num_manutencao > 0 && (num_manutencao % 3) == 0) {
-                                    printf("Atencao! O veiculo foi chamado a manutencao um número multiplo de 3 vezes");
+                            if (num_manutencao >= 3) {
+                                if (num_manutencao==3){
+                                    printf("Atencao! O veículo foi chamado a manutencao 3 vezes");
+                                }
+                                
+                                else if ((num_manutencao % 3) == 0) {
+                                    printf("Atencao! O veiculo foi chamado a manutencao %d vezes", num_manutencao);
                                 }
                             }
             
@@ -105,21 +108,22 @@ ESTADO ESTADO
 
 
 {ENTREGA}\( BEGIN(ER_ENTREGA);
-<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {    linha = strtok(yytext, ",");
+<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {    aux_matcarro = material_entrega;
+                                                                        linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
                                                                         quantidade=atoi(quant_str);
                                                                         aux_quant=total_quantidade;
-                                                                        
-                                                                        if (strcmp(material_entrega, material_carro) != 0) {
-                                                                            printf("Atencao! Este tipo de material nao esta a ser transportado, impossivel realizar a entrega!");
-                                                                        }
-                                                                        if (total_quantidade != quantidade) {
-                                                                            printf("Atencao! Esta quantidade de material nao esta a ser transportada, impossivel realizar a entrega!");
-                                                                        }
-                                                
 
-                                                                        if (posicao != "Linhas de Montagem"){
+
+                                                                        if (total_quantidade < quantidade) {
+                                                                            printf("\nAtencao! Esta quantidade de material nao esta a ser transportada, impossivel realizar a entrega!\n");
+                                                                        }
+                                                                        else if (strcmp(material_entrega, material_carro) != 0) {
+                                                                            printf("\nAtencao! Este tipo de material nao esta a ser transportado, impossivel realizar a entrega!\n");
+                                                                        }else{
+
+                                                                            if (posicao != "Linhas de Montagem"){
                                                                             bateria_necessaria= (100*0.1) + (aux_quant*0,01);
                                                                              if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
                                                                                 estado_bateria=0;
@@ -186,6 +190,10 @@ ESTADO ESTADO
                                                                         if (total_quantidade + quantidade > 80) {
                                                                             printf("Atencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
                                                                         } 
+                                                                        }
+                                                                       
+
+                                                                        
 
                                                                         printf("\n----------------------------------\n");
                                                                             printf("Estado da Bateria: %d \n", estado_bateria);
@@ -203,14 +211,16 @@ ESTADO ESTADO
 
 {RECOLHE}\[ BEGIN(ER_RECOLHE);
 <ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  aux_material = strtok(yytext, ",");
-                                                                                    material_carro = aux_material + 1;
+                                                                                    
 
                                                                                     quant_str = strtok(NULL, ")");
                                                                                     quantidade=atoi(quant_str);
                                                                                     aux_quant=total_quantidade;
-                                                                        
-    
-                                                                                    if (posicao != "Armazem"){
+
+                                                                                    if (total_quantidade + quantidade > 80) {
+                                                                                        printf("Atencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
+                                                                                    } else{
+                                                                                        if (posicao != "Armazem"){
                                                                                         bateria_necessaria= (100*0.1) + (aux_quant*0,01);
                                                                                     }else{bateria_necessaria=0;}
     
@@ -229,7 +239,8 @@ ESTADO ESTADO
                                                                                         if (estado_bateria==1){
                                                                                             printf("No final desta acao, a bateria será insuficiente. Por favor, enviar para o posto de carregamento");
                                                                                         }
-                                                                                        
+
+                                                                                        material_carro = aux_material + 1;
                                                                                     
                                                                                         if(tarefas>0){
                                                                                         total_quantidade = total_quantidade + quantidade;
@@ -253,9 +264,10 @@ ESTADO ESTADO
                                                                                         
                                                                                     }
                                                                                     
-                                                                                    if (total_quantidade + quantidade > 80) {
-                                                                                        printf("Atencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
-                                                                                    } 
+                                                                                    }
+    
+                                                                                    
+                                                                                    
 
                                                                                     printf("\n----------------------------------\n");
                                                                                         printf("Estado da Bateria: %d \n", estado_bateria);
