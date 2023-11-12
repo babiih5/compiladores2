@@ -874,7 +874,7 @@ YY_RULE_SETUP
                                 }
                                 
                                 else if ((num_manutencao % 3) == 0) {
-                                    printf("Atencao! O veiculo foi chamado a manutencao um número %d vezes", num_manutencao);
+                                    printf("Atencao! O veiculo foi chamado a manutencao %d vezes", num_manutencao);
                                 }
                             }
             

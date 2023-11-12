@@ -186,14 +186,7 @@ ESTADO ESTADO
 
                                                                             
                                                                         }
-
-                                                                        if (total_quantidade + quantidade > 80) {
-                                                                            printf("Atencao! Excedeu a capacidade do veiculo, impossivel realizar o transporte");
-                                                                        } 
-                                                                        }
-                                                                       
-
-                                                                        
+                                                                                                                                               
 
                                                                         printf("\n----------------------------------\n");
                                                                             printf("Estado da Bateria: %d \n", estado_bateria);
