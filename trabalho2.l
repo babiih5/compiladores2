@@ -110,8 +110,7 @@ ESTADO ESTADO
 
 
 {RECOLHE}\[ BEGIN(ER_RECOLHE);
-<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  printf("\n%s\n", material_recolha);
-                                                                                    printf("\n%s\n", material_entrega);
+<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  
 
                                                                                     aux_material = strtok(yytext, ",");
 
@@ -149,15 +148,8 @@ ESTADO ESTADO
                                                                                                 printf("\nNo final desta acao, a bateria será insuficiente. Por favor, enviar para o posto de carregamento");
                                                                                             }
 
-                                                                                            material_recolha = aux_material + 1;
-                                                                                        
-                                                                                            if(tarefas>0){
-                                                                                                total_quantidade = total_quantidade + quantidade;
-                                                                                            }
-                                                                                            else if (tarefas == 0) {
-                                                                                                total_quantidade = quantidade;
-                                                                                                tarefas = tarefas + 1;
-                                                                                            }
+                                                                                            material_recolha = aux_material;
+                                                                                            material_recolha++;
 
                                                                                             printf("\nMaterial: %s",material_recolha);
                                                                                             printf("\nQuantidade: %d", quantidade);
@@ -168,8 +160,16 @@ ESTADO ESTADO
                                                                                             
                                                                                             posicao = "Armazem";
 
-                                                                                            if (material_carro == ""){
-                                                                                                material_carro = material_recolha;
+                                                                                            if(tarefas>0){
+                                                                                                total_quantidade = total_quantidade + quantidade;
+                                                                                                material_carro = strdup(material_recolha);
+
+                                                                                            }
+                                                                                            else if (tarefas == 0) {
+                                                                                                total_quantidade = quantidade;
+                                                                                                tarefas = tarefas + 1;
+                                                                                                material_carro = strdup(material_recolha);
+
                                                                                             }
                                                                                             
 
@@ -200,8 +200,6 @@ ESTADO ESTADO
                                                                         quantidade=atoi(quant_str);
                                                                         aux_quant=total_quantidade;
 
-                                                                        printf("\n%s\n", material_recolha);
-                                                                        printf("%s\n", material_carro);
                                                                         if (total_quantidade < quantidade) {
                                                                             printf("\nAtencao! Esta quantidade de material nao esta a ser transportada, impossivel realizar a entrega!");
                                                                         }
@@ -270,6 +268,7 @@ ESTADO ESTADO
                                                                                 tarefas = tarefas - 1;
                                                                             }
                                                                             else {
+                                                                                material_carro = "";
                                                                                 material_carro = material_entrega;
                                                                                 }
 
@@ -301,7 +300,7 @@ ESTADO ESTADO
                                                                             }
                                                                             else if (strcmp(aux_estado, "M") == 0){
                                                                                 printf("\nMateriais: %s",material_carro);
-                                                                                printf("\nQuantidade: %d", quantidade);
+                                                                                printf("\nQuantidade: %d", total_quantidade);
 
                                                                             }
 
