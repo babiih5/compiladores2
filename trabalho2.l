@@ -7,7 +7,7 @@
     #include <string.h>
 
     int manutencao=2, estado_bateria=2, quantidade=0, num_manutencao=0, tarefas=0, total_quantidade=0;
-    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="",*aux_material="", *aux_estado="", *total_materiais="",*aux_matcarro="";
+    char *instrucao="", *posicao="Posto de Carregamento", *linha="", *quant_str="", *material_entrega="", *material_carro="",*material_recolha="",*aux_material="", *aux_estado="", *total_materiais="";
     float perc_bateria=100.0,aux_quant=0.0,bateria_necessaria=0.0;
 
 %}
@@ -26,7 +26,7 @@ ESTADO ESTADO
 
 
                             if (posicao != "Posto de Manutencao"){
-                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0,01);
+                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0.01);
                             }
                             
 
@@ -76,7 +76,7 @@ ESTADO ESTADO
                             }
 
                             if (posicao != "Posto de Carregamento"){
-                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0,01);
+                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0.01);
                             }
 
                             if (estado_bateria==0){
@@ -110,7 +110,10 @@ ESTADO ESTADO
 
 
 {RECOLHE}\[ BEGIN(ER_RECOLHE);
-<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  aux_material = strtok(yytext, ",");
+<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  printf("\n%s\n", material_recolha);
+                                                                                    printf("\n%s\n", material_entrega);
+
+                                                                                    aux_material = strtok(yytext, ",");
 
                                                                                     quant_str = strtok(NULL, ")");
                                                                                     quantidade=atoi(quant_str);
@@ -121,7 +124,7 @@ ESTADO ESTADO
                                                                                     } 
                                                                                     else{
                                                                                         if (posicao != "Armazem"){
-                                                                                        bateria_necessaria= (100*0.1) + (aux_quant*0,01);
+                                                                                        bateria_necessaria= (100*0.1) + (aux_quant*0.01);
                                                                                         }
                                                                                         else{
                                                                                             bateria_necessaria=0;
@@ -146,7 +149,7 @@ ESTADO ESTADO
                                                                                                 printf("\nNo final desta acao, a bateria será insuficiente. Por favor, enviar para o posto de carregamento");
                                                                                             }
 
-                                                                                            material_carro = aux_material + 1;
+                                                                                            material_recolha = aux_material + 1;
                                                                                         
                                                                                             if(tarefas>0){
                                                                                                 total_quantidade = total_quantidade + quantidade;
@@ -156,7 +159,7 @@ ESTADO ESTADO
                                                                                                 tarefas = tarefas + 1;
                                                                                             }
 
-                                                                                            printf("\nMaterial: %s",material_carro);
+                                                                                            printf("\nMaterial: %s",material_recolha);
                                                                                             printf("\nQuantidade: %d", quantidade);
 
                                                                                             if (posicao != "Armazem"){
@@ -165,8 +168,13 @@ ESTADO ESTADO
                                                                                             
                                                                                             posicao = "Armazem";
 
+                                                                                            if (material_carro == ""){
+                                                                                                material_carro = material_recolha;
+                                                                                            }
+                                                                                            
+
                                                                                         }
-                                                                                    
+
                                                                                     }
 
                                                                                     printf("\n----------------------------------");
@@ -185,14 +193,15 @@ ESTADO ESTADO
 <ER_RECOLHE>\] BEGIN 0;
 
 {ENTREGA}\( BEGIN(ER_ENTREGA);
-<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   printf("\n\nMaterial carro: %s \n\n", material_carro);
+<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   
                                                                         linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
                                                                         quantidade=atoi(quant_str);
                                                                         aux_quant=total_quantidade;
 
-
+                                                                        printf("\n%s\n", material_recolha);
+                                                                        printf("%s\n", material_carro);
                                                                         if (total_quantidade < quantidade) {
                                                                             printf("\nAtencao! Esta quantidade de material nao esta a ser transportada, impossivel realizar a entrega!");
                                                                         }
@@ -202,7 +211,7 @@ ESTADO ESTADO
                                                                         else{
 
                                                                             if (posicao != "Linhas de Montagem"){
-                                                                            bateria_necessaria= (100*0.1) + (aux_quant*0,01);
+                                                                            bateria_necessaria= (100*0.1) + (aux_quant*0.01);
 
                                                                                 if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
                                                                                     estado_bateria=0;
@@ -216,7 +225,7 @@ ESTADO ESTADO
                                                                             }
 
                                                                             else{
-                                                                                bateria_necessaria=(100*0,05)+(total_quantidade*0,01);
+                                                                                bateria_necessaria=(100*0.05)+(total_quantidade*0.01);
 
                                                                                 if (perc_bateria >= 10.8 && perc_bateria <= 16.6){
                                                                                     estado_bateria=0;
@@ -243,10 +252,10 @@ ESTADO ESTADO
                                                                             total_quantidade = total_quantidade - quantidade;
 
                                                                             if (posicao != "Linhas de Montagem"){
-                                                                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0,01);
+                                                                                perc_bateria= perc_bateria - (100*0.1) - (total_quantidade*0.01);
                                                                             }
                                                                             else{
-                                                                                perc_bateria= perc_bateria - (100*0,05)-(total_quantidade*0,01);
+                                                                                perc_bateria= perc_bateria - (100*0.05)-(total_quantidade*0.01);
                                                                             }
 
 
