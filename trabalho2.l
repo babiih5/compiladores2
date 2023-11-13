@@ -193,7 +193,7 @@ ESTADO ESTADO
 <ER_RECOLHE>\] BEGIN 0;
 
 {ENTREGA}\( BEGIN(ER_ENTREGA);
-<ER_ENTREGA>([A-Z]{2}([1-9][0-9]?|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   
+<ER_ENTREGA>([A-Z]{2}(([0-9]){3}|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   
                                                                         linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
