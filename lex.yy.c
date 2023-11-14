@@ -860,6 +860,9 @@ YY_RULE_SETUP
                                     num_manutencao = num_manutencao + 1;
                                     manutencao=2;
                                 }
+                                else{
+                                    printf("\nPor favor termine a tarefa pendente antes de realizar manutencao!");
+                                }
 
                             }
 
@@ -885,17 +888,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 68 "trabalho2.l"
+#line 71 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 71 "trabalho2.l"
+#line 74 "trabalho2.l"
 BEGIN(ER_BATERIA);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 72 "trabalho2.l"
+#line 75 "trabalho2.l"
 {        estado_bateria = atoi(yytext);
 
                             if (perc_bateria == 100) {
@@ -934,17 +937,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 109 "trabalho2.l"
+#line 112 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 112 "trabalho2.l"
+#line 115 "trabalho2.l"
 BEGIN(ER_RECOLHE);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 113 "trabalho2.l"
+#line 116 "trabalho2.l"
 {  
 
                                                                                     aux_material = strtok(yytext, ",");
@@ -963,24 +966,33 @@ YY_RULE_SETUP
                                                                                         else{
                                                                                             bateria_necessaria=0;
                                                                                         }
-    
-                                                                                        if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
-                                                                                            estado_bateria=0;
+
+                                                                                        if(manutencao==0){
+                                                                                            printf("\nManutencao muito baixa! Por favor, realizar manutencao antes de avancar!\n");
                                                                                         }
-                                                                                        else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
-                                                                                            estado_bateria=1;
-                                                                                        }
-                                                                                        else if(perc_bateria > 32.4){
-                                                                                            estado_bateria=2;
-                                                                                        }
+                                                                                        if(perc_bateria!=0 && manutencao!=0){
+                                                                                            if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
+                                                                                                estado_bateria=0;
+                                                                                            }
+                                                                                            else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
+                                                                                                estado_bateria=1;
+                                                                                            }
+                                                                                            else if(perc_bateria > 32.4){
+                                                                                                estado_bateria=2;
+                                                                                            }
         
+                                                                                        }
 
                                                                                         if (estado_bateria==0){
                                                                                             printf("\nAtencao! Bateria insuficiente, por favor enviar para o posto de carregamento!");
                                                                                         }
-                                                                                        else if(estado_bateria==1 || estado_bateria==2){
+                                                                                        else if(estado_bateria>0 && manutencao>0){
                                                                                             if (estado_bateria==1){
-                                                                                                printf("\nNo final desta acao, a bateria será insuficiente. Por favor, enviar para o posto de carregamento");
+                                                                                                printf("\nNo final desta acao, a bateria sera insuficiente. Por favor, enviar para o posto de carregamento");
+                                                                                            }
+                                                                                            if(manutencao==1){
+                                                                                                printf("\nNo final desta acao, a manutencao sera muito baixa. Por favor, enviar para o posto de manutencao\n");
+                                                                                                manutencao=0;
                                                                                             }
 
                                                                                             material_recolha = aux_material;
@@ -1007,6 +1019,7 @@ YY_RULE_SETUP
 
                                                                                             }
                                                                                             
+                                                                                
 
                                                                                         }
 
@@ -1024,17 +1037,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 193 "trabalho2.l"
+#line 206 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 195 "trabalho2.l"
+#line 208 "trabalho2.l"
 BEGIN(ER_ENTREGA);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 196 "trabalho2.l"
+#line 209 "trabalho2.l"
 {   
                                                                         linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
@@ -1049,36 +1062,41 @@ YY_RULE_SETUP
                                                                             printf("\nAtencao! Este tipo de material nao esta a ser transportado, impossivel realizar a entrega!");
                                                                         }
                                                                         else{
-
-                                                                            if (posicao != "Linhas de Montagem"){
-                                                                            bateria_necessaria= (100*0.1) + (aux_quant*0.01);
-
-                                                                                if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
-                                                                                    estado_bateria=0;
-                                                                                }
-                                                                                else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
-                                                                                    estado_bateria=1;
-                                                                                }
-                                                                                else if(perc_bateria > 32.4){
-                                                                                    estado_bateria=2;
-                                                                                }
+                                                                            if(manutencao==0){
+                                                                                printf("\nManutencao muito baixa! Por favor, realizar manutencao antes de avancar!\n");
                                                                             }
 
-                                                                            else{
-                                                                                bateria_necessaria=(100*0.05)+(total_quantidade*0.01);
+                                                                            if(perc_bateria!=0 && manutencao!=0){
+                                                                                if (posicao != "Linhas de Montagem"){
+                                                                                bateria_necessaria= (100*0.1) + (aux_quant*0.01);
 
-                                                                                if (perc_bateria >= 10.8 && perc_bateria <= 16.6){
-                                                                                    estado_bateria=0;
-                                                                                }
-                                                                                else if(perc_bateria > 16.6 && perc_bateria <= 22.4){
-                                                                                    estado_bateria=1;
-                                                                                }
-                                                                                else if(perc_bateria > 22.4){
-                                                                                    estado_bateria=2;
+
+                                                                                    if (perc_bateria >= 10.8 && perc_bateria <= 21.6){
+                                                                                        estado_bateria=0;
+                                                                                    }
+                                                                                    else if(perc_bateria > 21.6 && perc_bateria <= 32.4){
+                                                                                        estado_bateria=1;
+                                                                                    }
+                                                                                    else if(perc_bateria > 32.4){
+                                                                                        estado_bateria=2;
+                                                                                    }
                                                                                 }
 
-                                                                            }
-                                                                        
+                                                                                else{
+                                                                                    bateria_necessaria=(100*0.05)+(total_quantidade*0.01);
+
+                                                                                    if (perc_bateria >= 10.8 && perc_bateria <= 16.6){
+                                                                                        estado_bateria=0;
+                                                                                    }
+                                                                                    else if(perc_bateria > 16.6 && perc_bateria <= 22.4){
+                                                                                        estado_bateria=1;
+                                                                                    }
+                                                                                    else if(perc_bateria > 22.4){
+                                                                                        estado_bateria=2;
+                                                                                    }
+
+                                                                                }
+                                                                        }
 
                                                                         if (estado_bateria==0){
                                                                             printf("\nAtencao! Bateria insuficiente, por favor enviar para o posto de carregamento!");
@@ -1087,6 +1105,10 @@ YY_RULE_SETUP
 
                                                                             if (estado_bateria==1){
                                                                                 printf("\nNo final desta acao, a bateria será insuficiente. Por favor, enviar para o posto de carregamento");
+                                                                            }
+                                                                            if(manutencao==1){
+                                                                                printf("\nNo final desta acao, a manutencao sera muito baixa. Por favor, enviar para o posto de manutencao\n");
+                                                                                manutencao=0;
                                                                             }
 
                                                                             total_quantidade = total_quantidade - quantidade;
@@ -1114,7 +1136,7 @@ YY_RULE_SETUP
                                                                                 material_carro = material_entrega;
                                                                                 }
 
-                                                                            
+                                                                          
                                                                         }
                                                                                                                                                
                                                                         printf("\n----------------------------------");
@@ -1131,17 +1153,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 290 "trabalho2.l"
+#line 312 "trabalho2.l"
 BEGIN 0;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 292 "trabalho2.l"
+#line 314 "trabalho2.l"
 BEGIN(ER_ESTADO);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 293 "trabalho2.l"
+#line 315 "trabalho2.l"
 {    aux_estado = yytext;
 
                                                                             if (strcmp(aux_estado, "B") == 0){
@@ -1161,15 +1183,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 312 "trabalho2.l"
+#line 334 "trabalho2.l"
 BEGIN 0; 
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 314 "trabalho2.l"
+#line 336 "trabalho2.l"
 ECHO;
 	YY_BREAK
-#line 1173 "lex.yy.c"
+#line 1195 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ER_MANUTENCAO):
 case YY_STATE_EOF(ER_BATERIA):
@@ -2179,7 +2201,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 314 "trabalho2.l"
+#line 336 "trabalho2.l"
 
 
 
