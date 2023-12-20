@@ -113,7 +113,7 @@ ESTADO ESTADO
 
 
 {RECOLHE}\[ BEGIN(ER_RECOLHE);
-<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[1-9][0-9]*\))*)   {  
+<ER_RECOLHE>(\([A-Za-z0-9]{5},[1-9][0-9]*\)(,\([A-Za-z0-9]{5},[0-9]*\))*)   {  
 
                                                                                     aux_material = strtok(yytext, ",");
 
@@ -206,7 +206,7 @@ ESTADO ESTADO
 <ER_RECOLHE>\] BEGIN 0;
 
 {ENTREGA}\( BEGIN(ER_ENTREGA);
-<ER_ENTREGA>([A-Z]{2}(([0-9]){3}|100),[A-Za-z0-9]{5},[1-9][0-9]*) {   
+<ER_ENTREGA>([A-Z]{2}(([0-9]){3}|100),[A-Za-z0-9]{5},[0-9]*) {   
                                                                         linha = strtok(yytext, ",");
                                                                         material_entrega = strtok(NULL, ",");
                                                                         quant_str = strtok(NULL, ")");
