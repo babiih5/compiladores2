@@ -1,8 +1,13 @@
-%x ER_MANUTENCAO ER_BATERIA ER_ENTREGA ER_RECOLHE ER_ESTADO
+%x ER_MANUTENCAO ER_BATERIA ER_ENTREGA ER_RECOLHE ER_ESTADO ER_INIT_ESTADO
 
 %{
-  #include "robot.tab.h"
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include "trabalho3.tab.h"
 %}
+
+INIT_ESTADO INIT-ESTADO
 
 MANUTENCAO MANUTEN"Ç"AO
 CARREGA-BATERIA CARREGA"-"BATERIA
@@ -15,6 +20,11 @@ ESTADO ESTADO
 
 {INICIO}       return INICIO;
 {FIM}         return FIM;
+
+{INIT_ESTADO}\( {BEGIN(ER_INIT_ESTADO); return INICIO_INIT_ESTADO;}
+<ER_INIT_ESTADO>([A-Za-z],[0-9][1-9]*,\([A-Za-z0-9]{5},[1-9][0-9]*\),[0-9][1-9]*) { yylval.inteiro=atoi(yytext); return INIT_ESTADO;
+}
+<ER_INIT_ESTADO>\) {BEGIN 0; return FIM_INIT_ESTADO;}
 
 {MANUTENCAO}\( {BEGIN(ER_MANUTENCAO); return INICIO_MANUTENCAO;}
 <ER_MANUTENCAO>([0-2]) {    yylval.inteiro=atoi(yytext); return _MANUTENCAO;
@@ -51,3 +61,7 @@ ESTADO ESTADO
 .	;
 
 %%
+
+int yywrap(void) {
+    return 1;
+}
